@@ -17,10 +17,10 @@ on:
 jobs:
   build-and-deploy-dev:
     uses: ./.github/workflows/build-and-push-to-gar.yml
-    # Allow this to run when a push to main happens
-    # or we call the dispatch
+    # MozCloud deployment is upstream-only. Forks should not attempt to use
+    # Mozilla workload identity or GAR project configuration.
     if: >
-      github.ref == 'refs/heads/main' ||
-      github.event_name == 'workflow_dispatch'
+      github.repository == 'mozilla/fx-private-relay' &&
+      (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
     with:
       image_tag_metadata: ${{ inputs.environment || 'dev' }}
